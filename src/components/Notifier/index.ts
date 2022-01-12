@@ -20,15 +20,15 @@ class Notifier extends Component<any> {
     for (let i = 0; i < newSnacks.size; i += 1) {
       const newSnack = newSnacks.get(i)
 
-      if (newSnack.dismissed) {
-        closeSnackbar(newSnack.key)
-        removeSnackbar(newSnack.key)
+      if ((newSnack as any).dismissed) {
+        closeSnackbar((newSnack as any).key)
+        removeSnackbar((newSnack as any).key)
       }
 
       if (notExists) {
         continue
       }
-      notExists = notExists || !currentSnacks.filter(({ key }) => newSnack.key === key).size
+      notExists = notExists || !currentSnacks.filter(({ key }) => (newSnack as any).key === key).size
     }
     return notExists
   }
