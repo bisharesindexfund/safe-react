@@ -125,26 +125,20 @@ export const safeSelector = createSelector(
   },
 )
 
-export const safeActiveTokensSelector = createSelector(
-  safeSelector,
-  (safe): Set<string> => {
-    if (!safe) {
-      return Set()
-    }
+export const safeActiveTokensSelector = createSelector(safeSelector, (safe): Set<string> => {
+  if (!safe) {
+    return Set()
+  }
 
-    return safe.activeTokens
-  },
-)
+  return safe.activeTokens
+})
 
-export const safeActiveAssetsSelector = createSelector(
-  safeSelector,
-  (safe): Set<string> => {
-    if (!safe) {
-      return Set()
-    }
-    return safe.activeAssets
-  },
-)
+export const safeActiveAssetsSelector = createSelector(safeSelector, (safe): Set<string> => {
+  if (!safe) {
+    return Set()
+  }
+  return safe.activeAssets
+})
 
 export const safeActiveAssetsListSelector = createSelector(safeActiveAssetsSelector, (safeList) => {
   if (!safeList) {
@@ -153,27 +147,21 @@ export const safeActiveAssetsListSelector = createSelector(safeActiveAssetsSelec
   return Set(safeList)
 })
 
-export const safeBlacklistedTokensSelector = createSelector(
-  safeSelector,
-  (safe): Set<string> => {
-    if (!safe) {
-      return Set()
-    }
+export const safeBlacklistedTokensSelector = createSelector(safeSelector, (safe): Set<string> => {
+  if (!safe) {
+    return Set()
+  }
 
-    return safe.blacklistedTokens
-  },
-)
+  return safe.blacklistedTokens
+})
 
-export const safeBlacklistedAssetsSelector = createSelector(
-  safeSelector,
-  (safe): Set<string> => {
-    if (!safe) {
-      return Set()
-    }
+export const safeBlacklistedAssetsSelector = createSelector(safeSelector, (safe): Set<string> => {
+  if (!safe) {
+    return Set()
+  }
 
-    return safe.blacklistedAssets
-  },
-)
+  return safe.blacklistedAssets
+})
 
 export const safeActiveAssetsSelectorBySafe = (safeAddress: string, safes: SafesMap): Set<string> =>
   safes.get(safeAddress)?.get('activeAssets') || Set()
@@ -183,9 +171,10 @@ export const safeBlacklistedAssetsSelectorBySafe = (safeAddress: string, safes: 
 
 const baseSafe = makeSafe()
 
-export const safeFieldSelector = <K extends keyof SafeRecordProps>(field: K) => (
-  safe: SafeRecord,
-): SafeRecordProps[K] | undefined => (safe ? safe.get(field, baseSafe.get(field)) : undefined)
+export const safeFieldSelector =
+  <K extends keyof SafeRecordProps>(field: K) =>
+  (safe: SafeRecord): SafeRecordProps[K] | undefined =>
+    safe ? safe.get(field, baseSafe.get(field)) : undefined
 
 export const safeNameSelector = createSelector(safeSelector, safeFieldSelector('name'))
 
@@ -209,16 +198,13 @@ export const safeFeaturesEnabledSelector = createSelector(safeSelector, safeFiel
 
 export const safeSpendingLimitsSelector = createSelector(safeSelector, safeFieldSelector('spendingLimits'))
 
-export const safeOwnersAddressesListSelector = createSelector(
-  safeOwnersSelector,
-  (owners): List<string> => {
-    if (!owners) {
-      return List([])
-    }
+export const safeOwnersAddressesListSelector = createSelector(safeOwnersSelector, (owners): List<string> => {
+  if (!owners) {
+    return List([])
+  }
 
-    return owners?.map(({ address }) => address)
-  },
-)
+  return owners?.map(({ address }) => address)
+})
 
 export const getActiveTokensAddressesForAllSafes = createSelector(safesListSelector, (safes) => {
   const addresses = Set().withMutations((set) => {

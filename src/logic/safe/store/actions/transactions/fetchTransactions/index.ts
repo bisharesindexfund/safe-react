@@ -16,43 +16,42 @@ import { AppReduxState } from 'src/store'
 
 const noFunc = () => {}
 
-export default (safeAddress: string): ThunkAction<Promise<void>, AppReduxState, undefined, AnyAction> => async (
-  dispatch: ThunkDispatch<AppReduxState, undefined, AnyAction>,
-): Promise<void> => {
-  try {
-    const transactions = await backOff(() => loadOutgoingTransactions(safeAddress))
+export default (safeAddress: string): ThunkAction<Promise<void>, AppReduxState, undefined, AnyAction> =>
+  async (dispatch: ThunkDispatch<AppReduxState, undefined, AnyAction>): Promise<void> => {
+    try {
+      const transactions = await backOff(() => loadOutgoingTransactions(safeAddress))
 
-    if (transactions) {
-      const { cancel, outgoing } = transactions
-      const updateCancellationTxs = cancel.size
-        ? addOrUpdateCancellationTransactions({ safeAddress, transactions: cancel })
-        : noFunc
-      const updateOutgoingTxs = outgoing.size
-        ? addOrUpdateTransactions({
-            safeAddress,
-            transactions: outgoing,
-          })
-        : noFunc
+      if (transactions) {
+        const { cancel, outgoing } = transactions
+        const updateCancellationTxs = cancel.size
+          ? addOrUpdateCancellationTransactions({ safeAddress, transactions: cancel })
+          : noFunc
+        const updateOutgoingTxs = outgoing.size
+          ? addOrUpdateTransactions({
+              safeAddress,
+              transactions: outgoing,
+            })
+          : noFunc
 
-      batch(() => {
-        dispatch(updateCancellationTxs)
-        dispatch(updateOutgoingTxs)
-      })
+        batch(() => {
+          dispatch(updateCancellationTxs)
+          dispatch(updateOutgoingTxs)
+        })
+      }
+
+      const incomingTransactions = await loadIncomingTransactions(safeAddress)
+      const safeIncomingTxs = incomingTransactions.get(safeAddress)
+
+      if (safeIncomingTxs?.size) {
+        dispatch(addIncomingTransactions(incomingTransactions))
+      }
+
+      const moduleTransactions = await loadModuleTransactions(safeAddress)
+
+      if (moduleTransactions.length) {
+        dispatch(addModuleTransactions({ modules: moduleTransactions, safeAddress }))
+      }
+    } catch (error) {
+      console.log('Error fetching transactions:', error)
     }
-
-    const incomingTransactions = await loadIncomingTransactions(safeAddress)
-    const safeIncomingTxs = incomingTransactions.get(safeAddress)
-
-    if (safeIncomingTxs?.size) {
-      dispatch(addIncomingTransactions(incomingTransactions))
-    }
-
-    const moduleTransactions = await loadModuleTransactions(safeAddress)
-
-    if (moduleTransactions.length) {
-      dispatch(addModuleTransactions({ modules: moduleTransactions, safeAddress }))
-    }
-  } catch (error) {
-    console.log('Error fetching transactions:', error)
   }
-}

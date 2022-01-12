@@ -52,17 +52,12 @@ const ContractInteractionReview = ({ onClose, onPrev, tx }: Props): React.ReactE
     txAmount: string
   }>({ txData: '', txAmount: '', txRecipient: '' })
 
-  const {
-    gasCostFormatted,
-    txEstimationExecutionStatus,
-    isExecution,
-    isOffChainSignature,
-    isCreation,
-  } = useEstimateTransactionGas({
-    txRecipient: txParameters?.txRecipient,
-    txAmount: txParameters?.txAmount,
-    txData: txParameters?.txData,
-  })
+  const { gasCostFormatted, txEstimationExecutionStatus, isExecution, isOffChainSignature, isCreation } =
+    useEstimateTransactionGas({
+      txRecipient: txParameters?.txRecipient,
+      txAmount: txParameters?.txAmount,
+      txData: txParameters?.txData,
+    })
 
   useEffect(() => {
     setTxParameters({

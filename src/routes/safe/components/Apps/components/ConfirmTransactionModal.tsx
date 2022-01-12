@@ -102,18 +102,12 @@ export const ConfirmTransactionModal = ({
 }: OwnProps): React.ReactElement | null => {
   const [estimatedSafeTxGas, setEstimatedSafeTxGas] = useState(0)
 
-  const {
-    gasEstimation,
-    isOffChainSignature,
-    isCreation,
-    isExecution,
-    gasCostFormatted,
-    txEstimationExecutionStatus,
-  } = useEstimateTransactionGas({
-    txData: encodeMultiSendCall(txs),
-    txRecipient: MULTI_SEND_ADDRESS,
-    operation: DELEGATE_CALL,
-  })
+  const { gasEstimation, isOffChainSignature, isCreation, isExecution, gasCostFormatted, txEstimationExecutionStatus } =
+    useEstimateTransactionGas({
+      txData: encodeMultiSendCall(txs),
+      txRecipient: MULTI_SEND_ADDRESS,
+      operation: DELEGATE_CALL,
+    })
 
   useEffect(() => {
     if (params?.safeTxGas) {

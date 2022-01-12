@@ -28,6 +28,7 @@ export const useSafeScheduledUpdates = (safeLoaded: boolean, safeAddress?: strin
       })
 
       if (mounted) {
+        // @ts-ignore
         timer.current = setTimeout(() => {
           fetchSafeData(address)
         }, TIMEOUT * 3)

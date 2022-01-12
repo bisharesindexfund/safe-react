@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import React, { useState, useRef, useCallback, useEffect } from 'react'
 import styled from 'styled-components'
 import {
@@ -105,9 +107,8 @@ const AppFrame = ({ appUrl }: Props): React.ReactElement => {
   const matchSafeWithAddress = useRouteMatch<{ safeAddress: string }>({ path: `${SAFELIST_ADDRESS}/:safeAddress` })
 
   const iframeRef = useRef<HTMLIFrameElement>(null)
-  const [confirmTransactionModal, setConfirmTransactionModal] = useState<ConfirmTransactionModalState>(
-    INITIAL_CONFIRM_TX_MODAL_STATE,
-  )
+  const [confirmTransactionModal, setConfirmTransactionModal] =
+    useState<ConfirmTransactionModalState>(INITIAL_CONFIRM_TX_MODAL_STATE)
   const [appIsLoading, setAppIsLoading] = useState<boolean>(true)
   const [safeApp, setSafeApp] = useState<SafeApp | undefined>()
   const [isRemoveModalOpen, setIsRemoveModalOpen] = useState(false)
@@ -142,9 +143,10 @@ const AppFrame = ({ appUrl }: Props): React.ReactElement => {
       }),
     [setConfirmTransactionModal],
   )
-  const closeConfirmationModal = useCallback(() => setConfirmTransactionModal(INITIAL_CONFIRM_TX_MODAL_STATE), [
-    setConfirmTransactionModal,
-  ])
+  const closeConfirmationModal = useCallback(
+    () => setConfirmTransactionModal(INITIAL_CONFIRM_TX_MODAL_STATE),
+    [setConfirmTransactionModal],
+  )
 
   const { sendMessageToIframe } = useIframeMessageHandler(
     safeApp,

@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { Map } from 'immutable'
 import { handleActions } from 'redux-actions'
 
@@ -13,7 +15,9 @@ export type CancellationTxState = Map<string, CancellationTransactions>
 export default handleActions(
   {
     [ADD_OR_UPDATE_CANCELLATION_TRANSACTIONS]: (state, action) => {
-      const { safeAddress, transactions } = action.payload
+      const { safeAddress, // @ts-nocheck
+
+        transactions } = action.payload
 
       if (!safeAddress || !transactions || !transactions.size) {
         return state

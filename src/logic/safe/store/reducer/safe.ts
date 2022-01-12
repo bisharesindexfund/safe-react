@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { Map, Set, List } from 'immutable'
 import { handleActions } from 'redux-actions'
 
@@ -79,14 +81,16 @@ export default handleActions(
       const safe = action.payload
       const safeAddress = safe.address
 
+      //@ts-ignore
+
       const shouldUpdate = shouldSafeStoreBeUpdated(safe, state.getIn(['safes', safeAddress]))
 
       return shouldUpdate
         ? state.updateIn(
-            ['safes', safeAddress],
-            makeSafe({ name: safe?.name || 'LOADED SAFE', address: safeAddress }),
-            (prevSafe) => updateSafeProps(prevSafe, safe),
-          )
+          ['safes', safeAddress],
+          makeSafe({ name: safe?.name || 'LOADED SAFE', address: safeAddress }),
+          (prevSafe) => updateSafeProps(prevSafe, safe),
+        )
         : state
     },
     [ACTIVATE_TOKEN_FOR_ALL_SAFES]: (state: SafeReducerMap, action) => {
@@ -117,10 +121,10 @@ export default handleActions(
 
       return shouldUpdate
         ? state.updateIn(
-            ['safes', safeAddress],
-            makeSafe({ name: safe?.name || 'LOADED SAFE', address: safeAddress }),
-            (prevSafe) => updateSafeProps(prevSafe, safe),
-          )
+          ['safes', safeAddress],
+          makeSafe({ name: safe?.name || 'LOADED SAFE', address: safeAddress }),
+          (prevSafe) => updateSafeProps(prevSafe, safe),
+        )
         : state
     },
     [REMOVE_SAFE]: (state: SafeReducerMap, action) => {

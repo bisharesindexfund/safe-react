@@ -118,6 +118,8 @@ const SendCustomTx: React.FC<Props> = ({ initialValues, onClose, onNext, contrac
           const mutators = args[3]
           const pristine = args[2].pristine
           let shouldDisableSubmitButton = !isValidAddress
+          console.log('~ shouldDisableSubmitButton', shouldDisableSubmitButton);
+          console.log('~ selectedEntry', selectedEntry);
           if (selectedEntry) {
             shouldDisableSubmitButton = !selectedEntry.address
           }

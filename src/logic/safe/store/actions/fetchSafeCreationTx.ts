@@ -21,16 +21,8 @@ const fetchSafeCreationTx = (safeAddress) => async (dispatch) => {
   if (!safeAddress) return
   const creationTxFetched = await getCreationTx(safeAddress)
 
-  const {
-    created,
-    creationTx,
-    creator,
-    factoryAddress,
-    masterCopy,
-    setupData,
-    transactionHash,
-    type,
-  } = creationTxFetched
+  const { created, creationTx, creator, factoryAddress, masterCopy, setupData, transactionHash, type } =
+    creationTxFetched
   const txType = type || TransactionTypes.CREATION
   const safeTxHash = web3ReadOnly.utils.toHex('this is the creation transaction')
 

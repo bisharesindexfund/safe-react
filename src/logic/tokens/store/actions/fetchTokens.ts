@@ -90,29 +90,31 @@ export const getTokenInfos = async (tokenAddress: string): Promise<Token | undef
   return token
 }
 
-export const fetchTokens = () => async (
-  dispatch: ThunkDispatch<AppReduxState, undefined, AnyAction>,
-  getState: () => AppReduxState,
-): Promise<void> => {
-  try {
-    const currentSavedTokens = tokensSelector(getState())
+export const fetchTokens =
+  () =>
+  async (
+    dispatch: ThunkDispatch<AppReduxState, undefined, AnyAction>,
+    getState: () => AppReduxState,
+  ): Promise<void> => {
+    try {
+      const currentSavedTokens = tokensSelector(getState())
 
-    const {
-      data: { results: tokenList },
-    } = await fetchErc20AndErc721AssetsList()
+      const {
+        data: { results: tokenList },
+      } = await fetchErc20AndErc721AssetsList()
 
-    const erc20Tokens = tokenList.filter((token) => token.type.toLowerCase() === 'erc20')
+      const erc20Tokens = tokenList.filter((token) => token.type.toLowerCase() === 'erc20')
 
-    if (currentSavedTokens?.size === erc20Tokens.length) {
-      return
+      if (currentSavedTokens?.size === erc20Tokens.length) {
+        return
+      }
+
+      const tokens = List(erc20Tokens.map((token) => makeToken(token)))
+
+      dispatch(saveTokens(tokens))
+    } catch (err) {
+      console.error('Error fetching token list', err)
     }
-
-    const tokens = List(erc20Tokens.map((token) => makeToken(token)))
-
-    dispatch(saveTokens(tokens))
-  } catch (err) {
-    console.error('Error fetching token list', err)
   }
-}
 
 export default fetchTokens

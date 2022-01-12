@@ -79,21 +79,16 @@ export const ApproveTxModal = ({
   const oneConfirmationLeft = !thresholdReached && tx.confirmations.size + 1 === threshold
   const isTheTxReadyToBeExecuted = oneConfirmationLeft ? true : thresholdReached
 
-  const {
-    gasCostFormatted,
-    txEstimationExecutionStatus,
-    isExecution,
-    isOffChainSignature,
-    isCreation,
-  } = useEstimateTransactionGas({
-    txRecipient: tx.recipient,
-    txData: tx.data || '',
-    txConfirmations: tx.confirmations,
-    txAmount: tx.value,
-    preApprovingOwner: approveAndExecute ? userAddress : undefined,
-    safeTxGas: tx.safeTxGas,
-    operation: tx.operation,
-  })
+  const { gasCostFormatted, txEstimationExecutionStatus, isExecution, isOffChainSignature, isCreation } =
+    useEstimateTransactionGas({
+      txRecipient: tx.recipient,
+      txData: tx.data || '',
+      txConfirmations: tx.confirmations,
+      txAmount: tx.value,
+      preApprovingOwner: approveAndExecute ? userAddress : undefined,
+      safeTxGas: tx.safeTxGas,
+      operation: tx.operation,
+    })
 
   const handleExecuteCheckbox = () => setApproveAndExecute((prevApproveAndExecute) => !prevApproveAndExecute)
 

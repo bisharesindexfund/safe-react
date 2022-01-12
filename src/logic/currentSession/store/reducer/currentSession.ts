@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { handleActions } from 'redux-actions'
 
 import { LOAD_CURRENT_SESSION } from 'src/logic/currentSession/store/actions/loadCurrentSession'

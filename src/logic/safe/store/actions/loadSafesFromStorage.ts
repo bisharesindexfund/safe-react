@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { Dispatch } from 'redux'
 
 import { SAFES_KEY } from 'src/logic/safe/utils'
@@ -7,21 +9,23 @@ import { loadFromStorage } from 'src/utils/storage'
 
 import { addOrUpdateSafe } from './addOrUpdateSafe'
 
-const loadSafesFromStorage = () => async (dispatch: Dispatch): Promise<void> => {
-  try {
-    const safes = await loadFromStorage<Record<string, SafeRecordProps>>(SAFES_KEY)
+const loadSafesFromStorage =
+  () =>
+    async (dispatch: Dispatch): Promise<void> => {
+      try {
+        const safes = await loadFromStorage<Record<string, SafeRecordProps>>(SAFES_KEY)
 
-    if (safes) {
-      Object.values(safes).forEach((safeProps) => {
-        dispatch(addOrUpdateSafe(buildSafe(safeProps), true))
-      })
+        if (safes) {
+          Object.values(safes).forEach((safeProps) => {
+            dispatch(addOrUpdateSafe(buildSafe(safeProps), true))
+          })
+        }
+      } catch (err) {
+        // eslint-disable-next-line
+        console.error('Error while getting Safes from storage:', err)
+      }
+
+      return Promise.resolve()
     }
-  } catch (err) {
-    // eslint-disable-next-line
-    console.error('Error while getting Safes from storage:', err)
-  }
-
-  return Promise.resolve()
-}
 
 export default loadSafesFromStorage

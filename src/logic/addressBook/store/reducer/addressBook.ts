@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { handleActions } from 'redux-actions'
 
 import { AddressBookState, makeAddressBookEntry } from 'src/logic/addressBook/model/addressBook'

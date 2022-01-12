@@ -55,16 +55,11 @@ export const UpdateSafeModal = ({ onClose, safeAddress }: Props): React.ReactEle
     onClose()
   }
 
-  const {
-    gasCostFormatted,
-    txEstimationExecutionStatus,
-    isExecution,
-    isCreation,
-    isOffChainSignature,
-  } = useEstimateTransactionGas({
-    txData: multiSendCallData,
-    txRecipient: safeAddress,
-  })
+  const { gasCostFormatted, txEstimationExecutionStatus, isExecution, isCreation, isOffChainSignature } =
+    useEstimateTransactionGas({
+      txData: multiSendCallData,
+      txRecipient: safeAddress,
+    })
 
   return (
     <>

@@ -63,16 +63,11 @@ export const ReviewReplaceOwnerModal = ({
   const addressBook = useSelector(addressBookSelector)
   const ownersWithAddressBookName = owners ? getOwnersWithNameFromAddressBook(addressBook, owners) : List([])
 
-  const {
-    gasCostFormatted,
-    txEstimationExecutionStatus,
-    isExecution,
-    isCreation,
-    isOffChainSignature,
-  } = useEstimateTransactionGas({
-    txData: data,
-    txRecipient: safeAddress,
-  })
+  const { gasCostFormatted, txEstimationExecutionStatus, isExecution, isCreation, isOffChainSignature } =
+    useEstimateTransactionGas({
+      txData: data,
+      txRecipient: safeAddress,
+    })
 
   useEffect(() => {
     let isCurrent = true

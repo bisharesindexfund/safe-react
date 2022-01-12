@@ -43,16 +43,11 @@ export const ReviewAddOwner = ({ onClickBack, onClose, onSubmit, values }: Revie
   const safeName = useSelector(safeNameSelector)
   const owners = useSelector(safeOwnersSelector)
 
-  const {
-    gasCostFormatted,
-    txEstimationExecutionStatus,
-    isExecution,
-    isOffChainSignature,
-    isCreation,
-  } = useEstimateTransactionGas({
-    txData: data,
-    txRecipient: safeAddress,
-  })
+  const { gasCostFormatted, txEstimationExecutionStatus, isExecution, isOffChainSignature, isCreation } =
+    useEstimateTransactionGas({
+      txData: data,
+      txRecipient: safeAddress,
+    })
 
   useEffect(() => {
     let isCurrent = true

@@ -44,16 +44,11 @@ export const ChangeThresholdModal = ({
   const classes = useStyles()
   const [data, setData] = useState('')
 
-  const {
-    gasCostFormatted,
-    txEstimationExecutionStatus,
-    isCreation,
-    isExecution,
-    isOffChainSignature,
-  } = useEstimateTransactionGas({
-    txData: data,
-    txRecipient: safeAddress,
-  })
+  const { gasCostFormatted, txEstimationExecutionStatus, isCreation, isExecution, isOffChainSignature } =
+    useEstimateTransactionGas({
+      txData: data,
+      txRecipient: safeAddress,
+    })
 
   useEffect(() => {
     let isCurrent = true

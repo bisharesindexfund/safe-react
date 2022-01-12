@@ -51,17 +51,12 @@ const ReviewCustomTx = ({ onClose, onPrev, tx }: Props): React.ReactElement => {
   const dispatch = useDispatch()
   const safeAddress = useSelector(safeParamAddressFromStateSelector)
 
-  const {
-    gasCostFormatted,
-    txEstimationExecutionStatus,
-    isExecution,
-    isCreation,
-    isOffChainSignature,
-  } = useEstimateTransactionGas({
-    txRecipient: tx.contractAddress as string,
-    txData: tx.data ? tx.data.trim() : '',
-    txAmount: tx.value ? toTokenUnit(tx.value, nativeCoin.decimals) : '0',
-  })
+  const { gasCostFormatted, txEstimationExecutionStatus, isExecution, isCreation, isOffChainSignature } =
+    useEstimateTransactionGas({
+      txRecipient: tx.contractAddress as string,
+      txData: tx.data ? tx.data.trim() : '',
+      txAmount: tx.value ? toTokenUnit(tx.value, nativeCoin.decimals) : '0',
+    })
 
   const submitTx = async (): Promise<void> => {
     const txRecipient = tx.contractAddress

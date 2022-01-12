@@ -171,7 +171,9 @@ class GnoTable extends React.Component<any, any> {
             <CircularProgress size={60} />
           </Row>
         )}
+
         {!disablePagination && (
+          // @ts-ignore
           <TablePagination
             backIconButtonProps={backProps}
             classes={paginationClasses}

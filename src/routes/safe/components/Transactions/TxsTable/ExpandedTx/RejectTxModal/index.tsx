@@ -35,16 +35,11 @@ export const RejectTxModal = ({ isOpen, onClose, tx }: Props): React.ReactElemen
   const safeAddress = useSelector(safeParamAddressFromStateSelector)
   const classes = useStyles()
 
-  const {
-    gasCostFormatted,
-    txEstimationExecutionStatus,
-    isExecution,
-    isOffChainSignature,
-    isCreation,
-  } = useEstimateTransactionGas({
-    txData: EMPTY_DATA,
-    txRecipient: safeAddress,
-  })
+  const { gasCostFormatted, txEstimationExecutionStatus, isExecution, isOffChainSignature, isCreation } =
+    useEstimateTransactionGas({
+      txData: EMPTY_DATA,
+      txRecipient: safeAddress,
+    })
 
   const sendReplacementTransaction = () => {
     dispatch(

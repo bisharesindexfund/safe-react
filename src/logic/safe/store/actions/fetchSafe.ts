@@ -50,21 +50,17 @@ export const buildSafe = async (
   const safeAddress = checksumAddress(safeAdd)
 
   const safeParams = ['getThreshold', 'nonce', 'VERSION', 'getOwners']
-  const [
-    [, thresholdStr, nonceStr, currentVersion, remoteOwners = []],
-    safeInfo,
-    localSafe,
-    ethBalance,
-  ] = await Promise.all([
-    generateBatchRequests<[undefined, string | undefined, string | undefined, string | undefined, string[]]>({
-      abi: GnosisSafeSol.abi as AbiItem[],
-      address: safeAddress,
-      methods: safeParams,
-    }),
-    getSafeInfo(safeAddress),
-    getLocalSafe(safeAddress),
-    getBalanceInEtherOf(safeAddress),
-  ])
+  const [[, thresholdStr, nonceStr, currentVersion, remoteOwners = []], safeInfo, localSafe, ethBalance] =
+    await Promise.all([
+      generateBatchRequests<[undefined, string | undefined, string | undefined, string | undefined, string[]]>({
+        abi: GnosisSafeSol.abi as AbiItem[],
+        address: safeAddress,
+        methods: safeParams,
+      }),
+      getSafeInfo(safeAddress),
+      getLocalSafe(safeAddress),
+      getBalanceInEtherOf(safeAddress),
+    ])
 
   const threshold = Number(thresholdStr)
   const nonce = Number(nonceStr)
@@ -95,80 +91,82 @@ export const buildSafe = async (
   }
 }
 
-export const checkAndUpdateSafe = (safeAdd: string) => async (dispatch: Dispatch): Promise<void> => {
-  const safeAddress = checksumAddress(safeAdd)
-  // Check if the owner's safe did change and update them
-  const safeParams = ['getThreshold', 'nonce', 'getOwners']
-  const [[, remoteThreshold, remoteNonce, remoteOwners = []], safeInfo, localSafe] = await Promise.all([
-    generateBatchRequests<[undefined, string | undefined, string | undefined, string[]]>({
-      abi: GnosisSafeSol.abi as AbiItem[],
-      address: safeAddress,
-      methods: safeParams,
-    }),
-    getSafeInfo(safeAddress),
-    getLocalSafe(safeAddress),
-  ])
-
-  // request SpendingLimit info
-  const spendingLimits = safeInfo ? await getSpendingLimits(safeInfo.modules, safeAddress) : null
-
-  // Converts from [ { address, ownerName} ] to address array
-  const localOwners = localSafe ? localSafe.owners.map((localOwner) => localOwner.address) : []
-
-  const modules = await getModules(safeInfo)
-
-  const updatedSafe = {
-    address: safeAddress,
-    name: localSafe?.name,
-    modules,
-    spendingLimits,
-    nonce: Number(remoteNonce),
-    threshold: Number(remoteThreshold),
-    featuresEnabled: localSafe?.currentVersion ? enabledFeatures(localSafe.currentVersion) : localSafe?.featuresEnabled,
-  }
-
-  dispatch(updateSafe(updatedSafe))
-
-  // If the remote owners does not contain a local address, we remove that local owner
-  localOwners.forEach((localAddress) => {
-    const remoteOwnerIndex = remoteOwners.findIndex((remoteAddress) => sameAddress(remoteAddress, localAddress))
-    if (remoteOwnerIndex === -1) {
-      dispatch(removeSafeOwner({ safeAddress, ownerAddress: localAddress }))
-    }
-  })
-
-  // If the remote has an owner that we don't have locally, we add it
-  remoteOwners.forEach((remoteAddress) => {
-    const localOwnerIndex = localOwners.findIndex((localAddress) => sameAddress(remoteAddress, localAddress))
-    if (localOwnerIndex === -1) {
-      dispatch(
-        addSafeOwner({
-          safeAddress,
-          ownerAddress: remoteAddress,
-          ownerName: 'UNKNOWN',
-        }),
-      )
-    }
-  })
-}
-export default (safeAdd: string) => async (
-  dispatch: Dispatch<any>,
-  getState: () => AppReduxState,
-): Promise<Action | void> => {
-  try {
+export const checkAndUpdateSafe =
+  (safeAdd: string) =>
+  async (dispatch: Dispatch): Promise<void> => {
     const safeAddress = checksumAddress(safeAdd)
-    const safeName = (await getSafeName(safeAddress)) || 'LOADED SAFE'
-    const latestMasterContractVersion = latestMasterContractVersionSelector(getState())
-    const safeProps = await buildSafe(safeAddress, safeName, latestMasterContractVersion)
+    // Check if the owner's safe did change and update them
+    const safeParams = ['getThreshold', 'nonce', 'getOwners']
+    const [[, remoteThreshold, remoteNonce, remoteOwners = []], safeInfo, localSafe] = await Promise.all([
+      generateBatchRequests<[undefined, string | undefined, string | undefined, string[]]>({
+        abi: GnosisSafeSol.abi as AbiItem[],
+        address: safeAddress,
+        methods: safeParams,
+      }),
+      getSafeInfo(safeAddress),
+      getLocalSafe(safeAddress),
+    ])
 
-    // `updateSafe`, as `loadSafesFromStorage` will populate the store previous to this call
-    // and `addSafe` will only add a newly non-existent safe
-    // For the case where the safe does not exist in the localStorage,
-    // `updateSafe` uses a default `notSetValue` to add the Safe to the store
-    dispatch(updateSafe(safeProps))
-  } catch (err) {
-    console.error('Error while updating Safe information: ', err)
+    // request SpendingLimit info
+    const spendingLimits = safeInfo ? await getSpendingLimits(safeInfo.modules, safeAddress) : null
 
-    return Promise.resolve()
+    // Converts from [ { address, ownerName} ] to address array
+    const localOwners = localSafe ? localSafe.owners.map((localOwner) => localOwner.address) : []
+
+    const modules = await getModules(safeInfo)
+
+    const updatedSafe = {
+      address: safeAddress,
+      name: localSafe?.name,
+      modules,
+      spendingLimits,
+      nonce: Number(remoteNonce),
+      threshold: Number(remoteThreshold),
+      featuresEnabled: localSafe?.currentVersion
+        ? enabledFeatures(localSafe.currentVersion)
+        : localSafe?.featuresEnabled,
+    }
+
+    dispatch(updateSafe(updatedSafe))
+
+    // If the remote owners does not contain a local address, we remove that local owner
+    localOwners.forEach((localAddress) => {
+      const remoteOwnerIndex = remoteOwners.findIndex((remoteAddress) => sameAddress(remoteAddress, localAddress))
+      if (remoteOwnerIndex === -1) {
+        dispatch(removeSafeOwner({ safeAddress, ownerAddress: localAddress }))
+      }
+    })
+
+    // If the remote has an owner that we don't have locally, we add it
+    remoteOwners.forEach((remoteAddress) => {
+      const localOwnerIndex = localOwners.findIndex((localAddress) => sameAddress(remoteAddress, localAddress))
+      if (localOwnerIndex === -1) {
+        dispatch(
+          addSafeOwner({
+            safeAddress,
+            ownerAddress: remoteAddress,
+            ownerName: 'UNKNOWN',
+          }),
+        )
+      }
+    })
   }
-}
+export default (safeAdd: string) =>
+  async (dispatch: Dispatch<any>, getState: () => AppReduxState): Promise<Action | void> => {
+    try {
+      const safeAddress = checksumAddress(safeAdd)
+      const safeName = (await getSafeName(safeAddress)) || 'LOADED SAFE'
+      const latestMasterContractVersion = latestMasterContractVersionSelector(getState())
+      const safeProps = await buildSafe(safeAddress, safeName, latestMasterContractVersion)
+
+      // `updateSafe`, as `loadSafesFromStorage` will populate the store previous to this call
+      // and `addSafe` will only add a newly non-existent safe
+      // For the case where the safe does not exist in the localStorage,
+      // `updateSafe` uses a default `notSetValue` to add the Safe to the store
+      dispatch(updateSafe(safeProps))
+    } catch (err) {
+      console.error('Error while updating Safe information: ', err)
+
+      return Promise.resolve()
+    }
+  }

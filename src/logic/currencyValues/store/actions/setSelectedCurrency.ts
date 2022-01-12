@@ -11,9 +11,9 @@ const setCurrentCurrency = createAction(SET_CURRENT_CURRENCY, (safeAddress: stri
   selectedCurrency,
 }))
 
-export const setSelectedCurrency = (safeAddress: string, selectedCurrency: string) => (
-  dispatch: ThunkDispatch<AppReduxState, undefined, AnyAction>,
-): void => {
-  dispatch(setCurrentCurrency(safeAddress, selectedCurrency))
-  dispatch(fetchCurrencyRate(safeAddress, selectedCurrency))
-}
+export const setSelectedCurrency =
+  (safeAddress: string, selectedCurrency: string) =>
+  (dispatch: ThunkDispatch<AppReduxState, undefined, AnyAction>): void => {
+    dispatch(setCurrentCurrency(safeAddress, selectedCurrency))
+    dispatch(fetchCurrencyRate(safeAddress, selectedCurrency))
+  }

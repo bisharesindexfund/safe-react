@@ -25,6 +25,7 @@ const setTxStatusAsPending = ({ transaction, from }: SetPendingTransactionParams
       // setting user as the one who has triggered the tx
       // this allows to display the owner's "pending" status
       .updateIn(['ownersWithPendingActions', transaction.isCancellationTx ? 'reject' : 'confirm'], (previous) =>
+        //@ts-ignore
         previous.push(from),
       )
       // global transaction status
@@ -65,8 +66,10 @@ const updateTxBasedOnReceipt = ({
       tx.update('confirmations', (confirmations) => confirmations.push(makeConfirmation({ owner: from })))
     }
 
+    //@ts-ignore
     tx.updateIn(['ownersWithPendingActions', 'reject'], (prev) => prev.clear()).updateIn(
       ['ownersWithPendingActions', 'confirm'],
+      //@ts-ignore
       (prev) => prev.clear(),
     )
   })

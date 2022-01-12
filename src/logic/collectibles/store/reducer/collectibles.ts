@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { handleActions } from 'redux-actions'
 
 import { ADD_NFT_ASSETS, ADD_NFT_TOKENS } from 'src/logic/collectibles/store/actions/addCollectibles'

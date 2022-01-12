@@ -56,16 +56,11 @@ const ReviewCollectible = ({ onClose, onPrev, tx }: Props): React.ReactElement =
   )
   const [data, setData] = useState('')
 
-  const {
-    gasCostFormatted,
-    txEstimationExecutionStatus,
-    isExecution,
-    isOffChainSignature,
-    isCreation,
-  } = useEstimateTransactionGas({
-    txData: data,
-    txRecipient: tx.assetAddress,
-  })
+  const { gasCostFormatted, txEstimationExecutionStatus, isExecution, isOffChainSignature, isCreation } =
+    useEstimateTransactionGas({
+      txData: data,
+      txRecipient: tx.assetAddress,
+    })
 
   useEffect(() => {
     let isCurrent = true

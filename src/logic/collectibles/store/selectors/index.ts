@@ -39,12 +39,9 @@ export const activeNftAssetsListSelector = createSelector(
   },
 )
 
-export const safeActiveSelectorMap = createSelector(
-  activeNftAssetsListSelector,
-  (activeAssets): NFTAssets => {
-    return activeAssets.reduce((acc, asset) => {
-      acc[asset.address] = asset
-      return acc
-    }, {})
-  },
-)
+export const safeActiveSelectorMap = createSelector(activeNftAssetsListSelector, (activeAssets): NFTAssets => {
+  return activeAssets.reduce((acc, asset) => {
+    acc[asset.address] = asset
+    return acc
+  }, {})
+})

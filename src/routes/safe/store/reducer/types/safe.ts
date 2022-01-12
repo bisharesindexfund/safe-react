@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { SafeRecord, SafeRecordProps } from 'src/logic/safe/store/models/safe'
 import { Map } from 'immutable'
 

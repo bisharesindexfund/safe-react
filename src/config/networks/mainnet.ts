@@ -2,7 +2,7 @@ import BnbLogo from 'src/config/assets/token_bnb.svg'
 import { EnvironmentSettings, ETHEREUM_NETWORK, NetworkConfig } from 'src/config/networks/network.d'
 
 const baseConfig: EnvironmentSettings = {
-  txServiceUrl: 'https://gnosis-safe-transaction.binance.org/api/v1',
+  txServiceUrl: 'https://safe-transaction.gnosis.io',
   safeAppsUrl: 'https://safe-apps.dev.gnosisdev.com',
   gasPriceOracle: {
     url: 'https://ethgasstation.info/json/ethgasAPI.json',
@@ -25,7 +25,7 @@ const mainnet: NetworkConfig = {
     },
     production: {
       ...baseConfig,
-      txServiceUrl: 'https://gnosis-safe-transaction.binance.org/api/v1',
+      txServiceUrl: 'https://safe-transaction.gnosis.io',
       safeAppsUrl: 'https://apps.gnosis-safe.io',
     },
   },

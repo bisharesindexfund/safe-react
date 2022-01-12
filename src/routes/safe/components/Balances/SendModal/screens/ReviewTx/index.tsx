@@ -97,17 +97,12 @@ const ReviewTx = ({ onClose, onPrev, tx }: ReviewTxProps): React.ReactElement =>
   const txValue = isSendingNativeToken ? toTokenUnit(tx.amount, nativeCoin.decimals) : '0'
   const data = useTxData(isSendingNativeToken, tx.amount, tx.recipientAddress, txToken)
 
-  const {
-    gasCostFormatted,
-    txEstimationExecutionStatus,
-    isExecution,
-    isCreation,
-    isOffChainSignature,
-  } = useEstimateTransactionGas({
-    txData: data,
-    txRecipient,
-    txType: tx.txType,
-  })
+  const { gasCostFormatted, txEstimationExecutionStatus, isExecution, isCreation, isOffChainSignature } =
+    useEstimateTransactionGas({
+      txData: data,
+      txRecipient,
+      txType: tx.txType,
+    })
 
   const submitTx = async () => {
     const isSpendingLimit = sameString(tx.txType, 'spendingLimit')

@@ -12,8 +12,10 @@ import { Dispatch } from 'src/logic/safe/store/actions/types.d'
 //   },
 // })
 
-const updateActiveTokens = (safeAddress: string, activeTokens: Set<string>) => (dispatch: Dispatch): void => {
-  dispatch(updateTokensList({ safeAddress, activeTokens }))
-}
+const updateActiveTokens =
+  (safeAddress: string, activeTokens: Set<string>) =>
+  (dispatch: Dispatch): void => {
+    dispatch(updateTokensList({ safeAddress, activeTokens }))
+  }
 
 export default updateActiveTokens

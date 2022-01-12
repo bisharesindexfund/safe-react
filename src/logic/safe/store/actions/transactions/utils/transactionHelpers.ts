@@ -355,7 +355,7 @@ export const mockTransaction = (tx: TxToMock, safeAddress: string, state: AppRed
     currentUser: undefined,
     outgoingTxs,
     safe,
-    tx: (tx as unknown) as TxServiceModel,
+    tx: tx as unknown as TxServiceModel,
   })
 }
 
