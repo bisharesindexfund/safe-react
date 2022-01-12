@@ -57,7 +57,8 @@ export const safeFieldsValidation = async (values): Promise<Record<string, strin
   // if getSafeInfo does not provide data, it's not a valid safe.
   const safeInfo = await getSafeInfo(address)
   if (!safeInfo) {
-    errors[FIELD_LOAD_ADDRESS] = SAFE_ADDRESS_NOT_VALID
+    console.log('BISHARES WARN: SAFE_ADDRESS_NOT_VALIDSAFE_ADDRESS_NOT_VALID')
+    // errors[FIELD_LOAD_ADDRESS] = SAFE_ADDRESS_NOT_VALID
   }
 
   return errors
